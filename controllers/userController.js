@@ -41,16 +41,30 @@ exports.postLogin = async (req, res, next) => {
         if (!ismatch) {
             return res.status(404).send({ message: "Invalid credentials" })
         }
-        const token = await jwt.sign({ userId: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" })
-        res.cookie('token', token, {
-            httpOnly: true
+        const accessToken = await jwt.sign({ userId: user._id, email: user.email, role: user.role }, process.env.ACCESS_SECRET, { expiresIn: "15m" })
+        const refreshToken = await jwt.sign({ userId: user._id, email: user.email, role: user.role }, process.env.REFRESH_SECRET, { expiresIn: "7d" })
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: false 
         })
-        return res.status(200).send({ message: "login successfully", token })
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: false
+        })
+        return res.status(200).send({ message: "login successfully", accessToken })
     } catch (err) {
         res.status(500).send({ err, message: "something went wrong" });
     }
 }
 
+exports.getLogout = (req, res) => {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.json({ message: "logout successfully" });
+}
 
 exports.getProfile = (req, res) => {
     const { name, email, role } = req.user;

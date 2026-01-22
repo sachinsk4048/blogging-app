@@ -6,12 +6,12 @@ const jwt = require('jsonwebtoken');
 exports.authMiddleware = async (req, res, next) => {
     try {
         
-        const token = req.cookies.token || req.headers["authorization"]?.split(" ")[1];
-        if (!token) {
+        const accessToken = req.cookies.accessToken || req.headers["authorization"]?.split(" ")[1];
+        if (!accessToken) {
             return res.status(401).send({ message: 'unauthorize !token' });
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
         const user = await User.findById(decoded.userId);
         if (!user) {
             return res.status(401).send({ message: 'unauthorize  !user' });
