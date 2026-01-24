@@ -1,5 +1,6 @@
 // models\userModel.js
 
+const { string } = require('joi');
 const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
     name: {
@@ -31,7 +32,16 @@ const userSchema = mongoose.Schema({
     },
     emailTokenExpire: {
         type: Date
+    },
+
+    // reset password
+    resetPasswordToken :{
+        type : String
+    },
+    resetPasswordTokenExpire : {
+        type : Date
     }
+
 
 }, { timestamps: true })
 
