@@ -1,4 +1,5 @@
-const User = require('../models/userModel')
+const User = require('../models/userModel');
+const multer = require('multer');
 
 exports.getIndex = async (req, res) => {         //it display all the users on index page
     try {
@@ -16,8 +17,17 @@ exports.getViewProfile = (req, res) => {
 
 exports.postUploadAvatar = async (req, res) => {
     try {
-
+        if (!req.file) {
+            return res.status(400).json({
+                message: "Please upload an image"
+            });
+        }
+        const avatarPath = req.file.path
+        await User.findByIdAndUpdate(req.user._id, {
+            avatar: avatarPath
+        })
+        return res.status(200).json({ message: "Avatar updated successfully", avatar: avatarPath })
     } catch (error) {
-
+        return res.status(500).json({ message: "Server Error", error: error.message });
     }
 }

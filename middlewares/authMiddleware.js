@@ -11,7 +11,7 @@ exports.authMiddleware = async (req, res, next) => {
             return res.status(401).send({ message: 'unauthorize !token' });
         }
 
-        const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+        const decoded = jwt.verify(accessToken, process.env.ACCESS_SECRET);
         const user = await User.findById(decoded.userId);
         if (!user) {
             return res.status(401).send({ message: 'unauthorize  !user' });
