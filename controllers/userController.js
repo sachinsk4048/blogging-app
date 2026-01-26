@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const Post = require('../models/postModel');
 const Like = require('../models/likeModel');
-const comment = require('../models/commentModel')
+const Comment = require('../models/commentModel')
 const multer = require('multer');
 
 exports.getIndex = async (req, res) => {         //it display all the posts on index page
@@ -55,25 +55,67 @@ exports.postLikePost = async (req, res) => {
 }
 
 exports.postUnlikePost = async (req, res) => {
-  try {
+    try {
+        const postId = req.params.id;
+        const userId = req.user._id;
+
+        const existingLike = await Like.findOne({ userId, postId });
+        if (!existingLike) {
+            return res.status(400).json({ message: "You haven't liked this post" });
+        }
+
+        await Like.deleteOne({ userId, postId });
+
+        return res.status(200).json({ message: "Post unliked successfully" });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Server Error",
+            error: error.message
+        });
+    }
+};
+
+exports.postComment = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const userId = req.user._id;
+        const { comment } = req.body;
+
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: "post not found" });
+        }
+
+        await Comment.create({
+            postId,
+            userId,
+            comment
+        })
+        return res.status(201).json({ message: "comment successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+exports.postUncomment = async (req, res) => {
+      try {
     const postId = req.params.id;
     const userId = req.user._id;
 
-    const existingLike = await Like.findOne({ userId, postId });
-    if (!existingLike) {
-      return res.status(400).json({ message: "You haven't liked this post" });
+    // Check if comment exists
+    const existingComment = await Comment.findOne({ userId, postId });
+    if (!existingComment) {
+      return res.status(400).json({ message: "You haven't commented on this post" });
     }
 
-    await Like.deleteOne({ userId, postId });
+    // Delete comment
+    await Comment.deleteOne({ userId, postId });
 
-    return res.status(200).json({ message: "Post unliked successfully" });
+    return res.status(200).json({ message: "Comment removed successfully" });
   } catch (error) {
-    return res.status(500).json({
-      message: "Server Error",
-      error: error.message
-    });
+    return res.status(500).json({ message: error.message });
   }
-};
+}
 
 
 exports.getViewProfile = (req, res) => {

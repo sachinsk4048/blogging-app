@@ -40,3 +40,7 @@ exports.createPostSchema = joi.object({
   postDescription: joi.string().min(3).max(50).optional(),
   postContent: joi.string().min(3).required()
 })
+
+exports.commentSchema = joi.object({
+  comment : joi.string().min(3).max(30).required(),
+})
