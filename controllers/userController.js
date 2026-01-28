@@ -117,6 +117,9 @@ exports.postUncomment = async (req, res) => {
   }
 }
 
+exports.getComments = async(req,res)=>{
+    const postId = 
+}
 
 exports.getViewProfile = (req, res) => {
     const { name, email, role, avatar } = req.user;
