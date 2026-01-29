@@ -7,10 +7,26 @@ const { json } = require('express');
 
 exports.getIndex = async (req, res) => {         //it display all the posts on index page
     try {
-        const posts = await Post.find().populate("userId").sort({ createdAt: -1 });
+
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 2;
+        const skip = (page - 1) * limit;
+
+        const posts = await Post.find()
+            .populate("userId","name")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+            const totalPosts =await Post.countDocuments();
+            
+
         return res.status(200).json({
             success: true,
             count: posts.length,
+            page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts,
             posts
         });
     } catch (error) {
@@ -81,7 +97,7 @@ exports.postComment = async (req, res) => {
         const postId = req.params.id;
         const userId = req.user._id;
         const { comment } = req.body;
-        
+
         const post = await Post.findById(postId);
         if (!post) {
             return res.status(404).json({ message: "post not found" });
@@ -119,29 +135,29 @@ exports.postUncomment = async (req, res) => {
 }
 
 exports.getComments = async (req, res) => {
-  try {
-    const postId = req.params.id;
+    try {
+        const postId = req.params.id;
 
-    const comments = await Comment.find({ postId })
-      .populate("userId", "name email") // optional but good
-      .sort({ createdAt: -1 });
+        const comments = await Comment.find({ postId })
+            .populate("userId", "name email") // optional but good
+            .sort({ createdAt: -1 });
 
-    if (comments.length === 0) {
-      return res.status(200).json({
-        count: 0,
-        comments: [],
-        message: "No comments yet"
-      });
+        if (comments.length === 0) {
+            return res.status(200).json({
+                count: 0,
+                comments: [],
+                message: "No comments yet"
+            });
+        }
+
+        return res.status(200).json({
+            count: comments.length,
+            comments
+        });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-
-    return res.status(200).json({
-      count: comments.length,
-      comments
-    });
-
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
 };
 
 
