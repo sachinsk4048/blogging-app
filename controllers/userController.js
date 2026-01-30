@@ -1,13 +1,12 @@
 const User = require('../models/userModel');
 const Post = require('../models/postModel');
 const Like = require('../models/likeModel');
-const Comment = require('../models/commentModel')
+const Comment = require('../models/commentModel');
 const multer = require('multer');
 const { json } = require('express');
 
 exports.getIndex = async (req, res) => {         //it display all the posts on index page
     try {
-
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 2;
         const skip = (page - 1) * limit;

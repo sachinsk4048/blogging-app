@@ -3,9 +3,11 @@ const { default: mongoose } = require('mongoose');
 const userRouter = require('./routers/userRouter');
 require('dotenv').config();
 const cookieParser = require("cookie-parser");
+const passport = require("./config/oAuth");
 
 const app = express();
 
+app.use(passport.initialize());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));

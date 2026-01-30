@@ -23,7 +23,9 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: function() {
+            return this.provider === "local";
+        }
     },
     role: {
         type: String,
@@ -34,6 +36,15 @@ const userSchema = mongoose.Schema({
         type: String,
         default: null,
     },
+
+    //oAuth fields
+    provider: {
+        type: String,
+        default: "local"
+    },
+    providerId: String,
+
+
 
     //  Email verification fields
     isVerified: {
