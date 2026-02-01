@@ -47,11 +47,11 @@ exports.unbanUser = async (req, res) => {
       });
     }
 
-    // if (!user.isBanned) {
-    //   return res.status(400).json({
-    //     message: "User is already Unbanned"
-    //   });
-    // }
+    if (!user.isBanned) {
+      return res.status(400).json({
+        message: "User is already Unbanned"
+      });
+    }
 
     user.isBanned = false;
     user.bannedAt = null;
