@@ -4,12 +4,10 @@ const userRouter = require('./routers/userRouter');
 require('dotenv').config();
 const cookieParser = require("cookie-parser");
 const passport = require("./config/oAuth");
-const swaggerUi = require("swagger-ui-express");
-const swaggerSpec = require("./config/swagger");
+
 
 const app = express();
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(passport.initialize());
 app.use(cookieParser());
 app.use(express.json());

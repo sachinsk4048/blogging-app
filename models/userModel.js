@@ -1,6 +1,6 @@
 // models\userModel.js
 
-const { string } = require('joi');
+const { string, boolean } = require('joi');
 const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
     name: {
@@ -64,7 +64,14 @@ const userSchema = mongoose.Schema({
     },
     resetPasswordTokenExpire: {
         type: Date
-    }
+    },
+
+    //ban user
+    isBanned : {
+        type : Boolean,
+        default : false
+    },
+    bannedAt : Date,
 
 
 }, { timestamps: true })
