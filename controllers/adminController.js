@@ -68,23 +68,3 @@ exports.unbanUser = async (req, res) => {
     });
   }
 };
-
-exports.dashboardStats = async(req,res)=>{
-  try{
-    const totalUsers = await User.countDocuments();
-    const activeUsers = await User.countDocuments({isBanned : false})
-    const totalBanUsers = await User.countDocuments({isBanned : true});
-    const totalPosts = await Post.countDocuments();
-    
-    return res.status(200).json({
-      totalUsers,
-      activeUsers,
-      totalBanUsers,
-      totalPosts
-    })
-  }catch(error){
-    return res.status(500).json({
-      message: error.message
-    });
-  }
-}
