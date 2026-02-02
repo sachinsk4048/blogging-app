@@ -48,5 +48,6 @@ userRouter.get('/refresh', refreshController.refreshToken);
 //userRouter.get('/admin', authMiddleware, accessRole(['admin']), userController.getViewProfile);
 userRouter.patch('/admin/user/:userId/ban',authMiddleware,accessRole(['admin']),adminController.banUser);
 userRouter.patch('/admin/user/:userId/unban',authMiddleware,accessRole(['admin']),adminController.unbanUser);
+userRouter.get('/admin/dashboard',authMiddleware,accessRole(['admin']),adminController.dashboardStats);
 
 module.exports = userRouter;
