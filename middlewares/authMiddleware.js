@@ -37,7 +37,7 @@ exports.accessRole = (allowedRoles) => {
 };
 
 exports.isbanned = (req, res, next) => {
-    if (req.user.isbanned) {
+    if (req.user.isBanned) {
         return res.status(403).json({
             message: "Your account has been banned by admin"
         });

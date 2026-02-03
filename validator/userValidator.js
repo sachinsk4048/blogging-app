@@ -1,3 +1,5 @@
+// validator\userValidator.js
+
 const joi = require('joi');
 
 exports.signupSchema = joi.object({

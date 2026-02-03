@@ -1,3 +1,5 @@
+// controllers\adminController.js
+
 const User = require('../models/userModel');
 const Post = require('../models/postModel')
 exports.banUser = async (req, res) => {

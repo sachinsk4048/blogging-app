@@ -1,3 +1,5 @@
+// controllers\userController.js
+
 const User = require('../models/userModel');
 const Post = require('../models/postModel');
 const Like = require('../models/likeModel');
@@ -31,7 +33,7 @@ exports.getIndex = async (req, res) => {         //it display all the posts on i
     } catch (error) {
         return res.status(500).json({ message: "server error", error: error.message });
     }
-}
+};
 
 exports.getSinglePost = async (req, res) => {
     try {
@@ -44,7 +46,7 @@ exports.getSinglePost = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-}
+};
 
 exports.postLikePost = async (req, res) => {
     try {
@@ -68,7 +70,7 @@ exports.postLikePost = async (req, res) => {
             error: error.message
         });
     }
-}
+};
 
 exports.postUnlikePost = async (req, res) => {
     try {
@@ -111,7 +113,7 @@ exports.postComment = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
 
 exports.postUncomment = async (req, res) => {
     try {
@@ -131,7 +133,7 @@ exports.postUncomment = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
 
 exports.getComments = async (req, res) => {
     try {
@@ -158,19 +160,17 @@ exports.getComments = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
-
-
 exports.getViewProfile = (req, res) => {
     const { name, email, role, avatar } = req.user;
     return res.status(200).send({ name, email, role, avatar });
 }
 exports.postEditProfile = async (req, res) => {
     try {
-        const { name, phone, boi } = req.body;
+        const { name, phone, bio } = req.body;
         await User.findByIdAndUpdate(req.user._id, {
             name,
             phone,
-            boi
+            bio
         });
         return res.status(200).json({ message: "profile edit sucessfully" });
     } catch (error) {
